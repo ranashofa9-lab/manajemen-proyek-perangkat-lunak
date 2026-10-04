@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yunda Fashion - Digital Twin & Smart Inventory Dashboard</title>
+  <meta name="description" content="Sistem Antarmuka Digital Twin Etalase Toko dan Manajemen Stok Real-Time untuk Toko Baju Yunda Fashion." />
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-theme="dark">
+
+  <!-- =========================================================================
+       HEADER & NAVIGATION BAR
+       ========================================================================= -->
+  <header class="top-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="brand-logo-icon">👗</div>
+        <div class="brand-title-group">
+          <div class="brand-name">
+            YUNDA FASHION
+            <span class="brand-badge">DIGITAL TWIN V2.0</span>
+          </div>
+          <span class="brand-sub">Smart Store Showcase & Real-Time Inventory System</span>
+        </div>
+      </div>
+
+      <!-- Navigation Switcher -->
+      <nav class="header-nav">
+        <button class="nav-tab-btn active" data-view="digital-twin">
+          <span>🏬</span> Digital Twin & Etalase
+        </button>
+        <button class="nav-tab-btn" data-view="catalog">
+          <span>🛍️</span> Katalog Produk
+        </button>
+        <button class="nav-tab-btn" data-view="table">
+          <span>📊</span> Data Master Tabel
+        </button>
+      </nav>
+
+      <!-- Quick Action Buttons -->
+      <div class="header-actions">
+        <button id="btn-wa-alerts" class="header-btn" title="Peringatan WhatsApp Otomatis (Modul Orang 4)">
+          💬
+          <span class="badge-dot"></span>
+        </button>
+        <button id="btn-theme-toggle" class="header-btn" title="Ganti Tema (Gelap / Terang)">
+          ☀️
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN DASHBOARD CONTAINER
+       ========================================================================= -->
+  <main class="app-container">
+
+    <!-- 1. LIVE SUMMARY STATS CARDS -->
+    <section class="stats-grid">
+      <!-- Total Produk -->
+      <div class="stat-card total">
+        <div class="stat-info">
+          <span class="stat-label">Total Model Baju</span>
+          <span class="stat-value" id="stat-total-products">16</span>
+          <span class="stat-desc">📦 8 Kategori Lengkap</span>
+        </div>
+        <div class="stat-icon-wrapper">🛍️</div>
+      </div>
+
+      <!-- Total Fisik Stok -->
+      <div class="stat-card total">
+        <div class="stat-info">
+          <span class="stat-label">Total Unit Fisik</span>
+          <span class="stat-value" id="stat-total-stock">0</span>
+          <span class="stat-desc">Tersebar di 8 Rak Toko</span>
+        </div>
+        <div class="stat-icon-wrapper">📊</div>
+      </div>
+
+      <!-- Stok Aman (HIJAU) -->
+      <div class="stat-card safe">
+        <div class="stat-info">
+          <span class="stat-label">Stok Aman (Hijau)</span>
+          <span class="stat-value" id="stat-safe-count">0</span>
+          <span class="stat-desc">✅ Kuantitas ≥ 10 pcs</span>
+        </div>
+        <div class="stat-icon-wrapper">🟢</div>
+      </div>
+
+      <!-- Stok Menipis (KUNING) -->
+      <div class="stat-card warning">
+        <div class="stat-info">
+          <span class="stat-label">Menipis (Kuning)</span>
+          <span class="stat-value" id="stat-warning-count">0</span>
+          <span class="stat-desc">⚠️ Perlu Reorder Point</span>
+        </div>
+        <div class="stat-icon-wrapper">🟡</div>
+      </div>
+
+      <!-- Stok Kritis (MERAH) -->
+      <div class="stat-card critical">
+        <div class="stat-info">
+          <span class="stat-label">Kritis (Merah)</span>
+          <span class="stat-value" id="stat-critical-count">0</span>
+          <span class="stat-desc">🚨 Segera Restok (≤ 3 pcs)</span>
+        </div>
+        <div class="stat-icon-wrapper">🔴</div>
+      </div>
+    </section>
+
+    <!-- 2. SIMULATION & INTEGRATION TEST BAR (Orang 1, 3, 4 Ready) -->
+    <section class="simulation-bar">
+      <div class="sim-info">
+        <span class="sim-badge">INTEGRATION TOOLKIT</span>
+        <span style="font-size: 0.85rem; color: var(--text-secondary);">
+          Simulasikan perubahan stok langsung untuk menguji otomatisasi warna, Reorder Point, & Notifikasi WA.
+        </span>
+      </div>
+      <div class="sim-buttons">
+        <button id="btn-sim-critical" class="btn-sim red" title="Simulasikan penjualan kilat hingga stok masuk batas kritis (Merah)">
+          ⚡ Simulasi Stok Terjual (Kritis Merah)
+        </button>
+        <button id="btn-sim-restock" class="btn-sim green" title="Simulasikan kedatangan barang restok baru (Hijau)">
+          📥 Simulasi Restok Penuh (Aman Hijau)
+        </button>
+        <button id="btn-reset-data" class="btn-sim" title="Reset ke data default">
+          🔄 Reset Awal
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. DIGITAL TWIN ETALASE TOKO (Visual 2D Floor Plan Grid) -->
+    <section id="digital-twin-section" class="digital-twin-section">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2 class="section-title">
+            <span>🗺️</span> Digital Twin Layout Etalase Toko
+          </h2>
+          <span class="live-indicator">
+            <span class="live-dot"></span> LIVE SENSOR SINKRON
+          </span>
+        </div>
+
+        <!-- Legend -->
+        <div class="stock-legend">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">STATUS INDIKATOR:</span>
+          <div class="legend-item">
+            <span class="legend-color safe"></span> Hijau (Aman &gt; 9 pcs)
+          </div>
+          <div class="legend-item">
+            <span class="legend-color warning"></span> Kuning (Menipis 4-9 pcs)
+          </div>
+          <div class="legend-item">
+            <span class="legend-color critical"></span> Merah (Kritis &le; 3 pcs)
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: -0.5rem;">
+        Klik salah satu rak/etalase di bawah untuk memfilter dan melihat daftar produk yang ada di posisi fisik tersebut secara otomatis.
+      </p>
+
+      <!-- Floorplan Visual Grid Container -->
+      <div class="store-floorplan-container">
+        <div id="store-digital-twin-grid" class="store-grid-layout">
+          <!-- Dynamic rendered via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CATALOG SECTION & CONTROLS -->
+    <section id="catalog-section" class="catalog-section">
+      <!-- Search and Filter Controls -->
+      <div class="controls-bar">
+        <!-- Search Input -->
+        <div class="search-box-wrapper">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Cari model baju, SKU, varian warna, atau lokasi rak..." 
+          />
+        </div>
+
+        <!-- Stock Status Filter -->
+        <div class="filter-group">
+          <label for="status-filter-select" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">Status Stok:</label>
+          <select id="status-filter-select" class="status-filter-select">
+            <option value="all">Semua Status</option>
+            <option value="safe">🟢 Hijau (Stok Aman)</option>
+            <option value="warning">🟡 Kuning (Stok Menipis)</option>
+            <option value="critical">🔴 Merah (Stok Kritis)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills (8 Kategori Yunda Fashion) -->
+      <div id="category-pills-bar" class="category-pills-bar">
+        <!-- Dynamic rendered via app.js -->
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="products-grid">
+        <!-- Dynamic Product Cards rendered via app.js -->
+      </div>
+    </section>
+
+    <!-- 5. DATA MASTER TABLE SECTION (View untuk Sinkronisasi Tim) -->
+    <section id="table-section" class="digital-twin-section" style="display: none;">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2 class="section-title">
+            <span>📊</span> Data Master Produk & Varian (MySQL Synchronized)
+          </h2>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">
+        Tampilan format tabel data master yang selaras dengan rancangan tabel database Orang 1 dan REST API Orang 3.
+      </p>
+
+      <div style="overflow-x: auto; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+        <table class="variant-table" style="min-width: 750px;">
+          <thead>
+            <tr>
+              <th style="width: 50px;">No</th>
+              <th>Nama Produk & SKU</th>
+              <th>Kategori</th>
+              <th>Penempatan Rak</th>
+              <th>Status Indikator</th>
+              <th>Harga Jual</th>
+              <th style="text-align: right;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="product-table-body">
+            <!-- Dynamic rendered via app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       MODALS
+       ========================================================================= -->
+
+  <!-- Modal 1: Kelola Stok & Varian (Restok / Terjual) -->
+  <div id="stock-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="stock-modal-title" class="modal-title">Kelola Stok Varian</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div id="stock-modal-body" class="modal-body">
+        <!-- Dynamic Content -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action-primary modal-close-btn" style="padding: 0.5rem 1.25rem;">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: QR Code Varian (Modul Orang 4) -->
+  <div id="qr-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="qr-modal-title" class="modal-title">Stiker QR Code Varian</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div id="qr-modal-body" class="modal-body">
+        <!-- Dynamic Content -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-sim" onclick="window.print()" style="margin-right: auto;">🖨️ Cetak Stiker QR</button>
+        <button class="btn-action-primary modal-close-btn" style="padding: 0.5rem 1.25rem;">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: WhatsApp Alert Broadcast History (Modul Orang 4) -->
+  <div id="wa-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">💬 Riwayat Notifikasi WhatsApp Smart Alert</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div id="wa-modal-body" class="modal-body">
+        <!-- Dynamic Content -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action-primary modal-close-btn" style="padding: 0.5rem 1.25rem;">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 0.5rem;"></div>
+
+  <!-- Javascript Scripts (Direct File & Server Compatible) -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
